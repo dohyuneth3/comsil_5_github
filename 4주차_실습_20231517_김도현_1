@@ -1,0 +1,33 @@
+name="'basename $0'"
+
+if [ $# -lt 1 ]
+
+then
+	echo "Usage: $name searchfor [...searchfor]"
+	echo "(You didn't tell me what you want to search for.)"
+	exit 1
+
+fi
+search="$1"
+shift
+
+while [ $# -gt 0 ]
+do
+	search="$search|$1"
+	shift
+done
+
+egrep -i "($search)" data | awk '
+BEGIN {
+	FS="|"
+}
+{
+	print "---------->"
+	print "name: " $1
+	print "address: " $2
+	print "phone: " $3
+	print "---------->"
+}
+'
+
+
